@@ -15,7 +15,7 @@ class _AddMedicamentoScreenState extends State<AddMedicineScreen> {
   final _nombreController = TextEditingController();
   DateTime _fechaInicio = DateTime.now();
   DateTime _hora = DateTime.now();
-  int _frecuencia = 1;
+  int _frecuencia = 4;
   DateTime _fechaFin = DateTime.now();
   final _medicamentoService = MedicamentoService();
 
