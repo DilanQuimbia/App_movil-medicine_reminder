@@ -9,6 +9,7 @@ import 'package:medicine_reminder/screens/register_screen.dart';
 import 'package:medicine_reminder/screens/home_screen.dart';
 import 'package:medicine_reminder/services/auth_service.dart';
 import 'package:medicine_reminder/screens/add_medicine_screen.dart';
+import 'package:medicine_reminder/screens/detail_medicine_screen.dart';
 import 'package:medicine_reminder/services/notifications_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => HomeScreen(),
         '/add_medicine': (context) => AddMedicineScreen(),
+        '/detail_medicine': (context) => DetailMedicineScreen(),
       },
       // Verifica si existe un usuario autenticado
       home: StreamBuilder<User?>(
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
         stream: AuthService().authStateChanges,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {

@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:medicine_reminder/services/medicine_service.dart';
+import 'package:medicine_reminder/utils/helpers/snackbar_helper.dart';
 import '../models/medicine_model.dart';
-
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -81,11 +81,26 @@ class HomeScreen extends StatelessWidget {
                     itemCount: medicamentos.length,
                     itemBuilder: (context, index) {
                       final medicamento = medicamentos[index];
-                      return ListTile(
-                        title: Text(medicamento.nombre),
-                        subtitle: Text('Fecha Inicio: ${DateFormat('dd/MM/yyyy').format(medicamento.fechaInicio)}'),
-                        //trailing: Icon(Icons.access_time),
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, '/detail_medicine', arguments: medicamento);
+                        },
+                          child: ListTile(
+                            title: Text(medicamento.nombre),
+                            subtitle: Text(DateFormat('dd/MM/yyyy').format(medicamento.fechaInicio)),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () async {
+                                await _mostrarDialogoConfirmacion(context, medicamento.id);
+                              },
+                            ),
+                          )
                       );
+                      // return ListTile(
+                      //   title: Text(medicamento.nombre),
+                      //   subtitle: Text('Fecha Inicio: ${DateFormat('dd/MM/yyyy').format(medicamento.fechaInicio)}'),
+                      //   //trailing: Icon(Icons.access_time),
+                      // );
                     },
                   );
                 },
@@ -102,6 +117,36 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _mostrarDialogoConfirmacion(BuildContext context, String medicamentoId) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // Impide que el usuario cierre el dialogo tocando fuera de él
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Eliminar medicamento?'),
+          content: const Text('Confirmar: '),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();  // Cierra el diálogo
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Eliminar medicamento
+                await MedicamentoService().eliminarMedicamento(medicamentoId);
+                Navigator.of(context).pop();  // Cierra el diálogo
+                mostrarSnackBar("Medicamento eliminado", context);
+              },
+              child: const Text('Eliminar'),
+            ),
+          ],
+        );
+      },
     );
   }
 

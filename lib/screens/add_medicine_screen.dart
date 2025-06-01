@@ -100,9 +100,9 @@ class _AddMedicamentoScreenState extends State<AddMedicineScreen> {
       }
 
       await NotificacionesService.programarNotificacion(
-        medicamento.id.hashCode, // El ID de la notificación
-        'Recordatorio de medicamento', // Título
-        'Hora de tomar ${medicamento.nombre}',
+        medicamento.id, // El ID de la notificación
+        'RECORDATORIO !!', // Título
+        'Hora de ${medicamento.nombre}',
         medicamento.hora,
         medicamento.fechaInicio,
         medicamento.fechaFin,
@@ -300,7 +300,7 @@ class _AddMedicamentoScreenState extends State<AddMedicineScreen> {
       child: DropdownButton<int>(
         value: _frecuencia,
         isExpanded: true,
-        items: [1, 3, 4, 6, 8, 12, 24].map((int value) {
+        items: [4, 5, 6, 8, 12, 24].map((int value) {
           return DropdownMenuItem<int>(
             value: value,
             child: Text('Cada $value horas'),
